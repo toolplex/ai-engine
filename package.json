@@ -1,0 +1,70 @@
+{
+  "name": "@toolplex/ai-engine",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Core AI chat engine for ToolPlex - powers desktop, cloud, and CLI",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./adapters": {
+      "types": "./dist/adapters/index.d.ts",
+      "import": "./dist/adapters/index.js",
+      "require": "./dist/adapters/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' --fix",
+    "format": "prettier --write 'src/**/*.ts'"
+  },
+  "keywords": [
+    "ai",
+    "chat",
+    "mcp",
+    "toolplex"
+  ],
+  "license": "BSL-1.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toolplex/ai-engine"
+  },
+  "homepage": "https://toolplex.ai",
+  "bugs": {
+    "url": "https://github.com/toolplex/ai-engine/issues"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^2.0.23",
+    "@ai-sdk/google": "^2.0.17",
+    "@ai-sdk/openai": "^2.0.42",
+    "@ai-sdk/openai-compatible": "^1.0.19",
+    "@modelcontextprotocol/sdk": "^1.16.0",
+    "@openrouter/ai-sdk-provider": "^1.2.0",
+    "@toolplex/client": "^0.1.39",
+    "ai": "^5.0.60"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@types/node": "^20.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "eslint": "^9.24.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.6",
+    "prettier": "^3.5.3",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.29.0"
+  }
+}
