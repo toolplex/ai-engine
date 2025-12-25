@@ -349,10 +349,23 @@ export class ChatEngine {
           modelId,
         });
 
-        this.adapter.events.emitError(
-          streamId,
-          error instanceof Error ? error.message : String(error),
-        );
+        // Extract error message, handling various error formats
+        let errorMessage: string;
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        } else if (typeof error === "string") {
+          errorMessage = error;
+        } else if (error && typeof error === "object") {
+          // Handle objects with message property or stringify
+          errorMessage =
+            (error as any).message ||
+            (error as any).error ||
+            JSON.stringify(error);
+        } else {
+          errorMessage = "Unknown error";
+        }
+
+        this.adapter.events.emitError(streamId, errorMessage);
 
         if (resolveOnFinish) {
           resolveOnFinish();

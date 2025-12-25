@@ -40,7 +40,7 @@ export function getProvider(
       }
       const toolplexProvider = createToolPlex({
         apiKey: credentials.toolplexApiKey,
-        baseURL: "https://api.toolplex.ai",
+        baseURL: credentials.toolplexBaseURL || "https://api.toolplex.ai",
         clientVersion: options?.clientVersion,
         logger: options?.logger,
       });

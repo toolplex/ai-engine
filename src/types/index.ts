@@ -33,6 +33,7 @@ export interface ProviderCredentials {
   deepseekKey?: string;
   moonshotKey?: string;
   toolplexApiKey?: string;
+  toolplexBaseURL?: string; // Custom base URL for cloud VPS (private network)
 }
 
 /**
