@@ -53,11 +53,13 @@ export interface TransportFactory {
    * Create a transport and connect to the MCP server
    * @param apiKey - ToolPlex API key
    * @param sessionResumeHistory - Optional session history for resuming
+   * @param userId - Optional user ID for per-user telemetry (system keys only)
    * @returns Connected MCP session
    */
   createTransport(
     apiKey: string,
     sessionResumeHistory?: string,
+    userId?: string,
   ): Promise<MCPSession>;
 
   /**

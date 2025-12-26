@@ -60,16 +60,23 @@ export class ChatEngine {
 
   /**
    * Initialize MCP for a session
+   * @param userId - Optional user ID for system API keys (per-user telemetry)
    */
-  async initializeMCP(sessionId: string): Promise<void> {
+  async initializeMCP(sessionId: string, userId?: string): Promise<void> {
     const apiKey = await this.adapter.credentials.getToolPlexApiKey();
     const sessionInfo = this.adapter.mcp.getSessionInfo(sessionId);
 
     if (!sessionInfo.exists) {
       this.adapter.logger.debug("ChatEngine: Initializing MCP transport", {
         sessionId,
+        userId,
       });
-      const result = await this.adapter.mcp.createTransport(sessionId, apiKey);
+      const result = await this.adapter.mcp.createTransport(
+        sessionId,
+        apiKey,
+        undefined,
+        userId,
+      );
 
       if (!result.success) {
         throw new Error(`Failed to create MCP transport: ${result.error}`);
@@ -79,11 +86,13 @@ export class ChatEngine {
 
   /**
    * Initialize a session with ToolPlex context
+   * @param userId - Optional user ID for system API keys (per-user telemetry)
    */
   async initializeSession(
     sessionId: string,
     modelId: string,
     provider: string,
+    userId?: string,
   ): Promise<{ success: boolean; context?: string; error?: string }> {
     try {
       this.adapter.logger.debug(
@@ -92,11 +101,12 @@ export class ChatEngine {
           sessionId,
           modelId,
           provider,
+          userId,
         },
       );
 
       // Initialize MCP transport
-      await this.initializeMCP(sessionId);
+      await this.initializeMCP(sessionId, userId);
 
       // Extract model metadata
       const modelParts = modelId.split("/");
@@ -189,7 +199,7 @@ export class ChatEngine {
     const apiKey = await this.adapter.credentials.getToolPlexApiKey();
     if (apiKey) {
       try {
-        await this.initializeMCP(sessionId);
+        await this.initializeMCP(sessionId, options.userId);
         mcpTools = await buildMCPTools({
           sessionId,
           streamId,

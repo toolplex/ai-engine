@@ -36,11 +36,14 @@ export class MCPClient {
    * CRITICAL: The ToolPlex MCP server fetches tool schemas from the API during startup.
    * This is asynchronous and can take time. We MUST wait for this to complete before
    * returning, otherwise listTools() will return empty schemas.
+   *
+   * @param userId - Optional user ID for system API keys (per-user telemetry)
    */
   async createSession(
     sessionId: string,
     apiKey: string,
     sessionResumeHistory?: string,
+    userId?: string,
   ): Promise<MCPResult> {
     try {
       // Clean up existing session if it exists
@@ -51,6 +54,7 @@ export class MCPClient {
       const session = await this.transportFactory.createTransport(
         apiKey,
         sessionResumeHistory,
+        userId,
       );
 
       this.sessions.set(sessionId, session);

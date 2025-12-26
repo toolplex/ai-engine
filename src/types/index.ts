@@ -82,6 +82,8 @@ export interface StreamOptions {
   fileAttachments?: FileAttachment[];
   streamingMessageId?: string;
   modelConfig?: ModelConfigFlags;
+  /** Optional user ID for system API keys (per-user telemetry) */
+  userId?: string;
 }
 
 /**

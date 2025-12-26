@@ -103,11 +103,14 @@ export interface ConfirmationHandler {
  * Abstracts away the transport mechanism (stdio, HTTP, etc.)
  */
 export interface MCPTransportAdapter {
-  /** Create/connect MCP transport for a session */
+  /** Create/connect MCP transport for a session
+   * @param userId - Optional user ID for system API keys (per-user telemetry)
+   */
   createTransport(
     sessionId: string,
     apiKey: string,
     sessionResumeHistory?: string,
+    userId?: string,
   ): Promise<MCPResult>;
 
   /** Get session info */

@@ -28,6 +28,7 @@ export class DefaultStdioTransportFactory implements TransportFactory {
   async createTransport(
     apiKey: string,
     sessionResumeHistory?: string,
+    userId?: string,
   ): Promise<MCPSession> {
     const toolplexPath = getToolplexClientPath();
 
@@ -41,6 +42,11 @@ export class DefaultStdioTransportFactory implements TransportFactory {
     // Add session resume history if provided
     if (sessionResumeHistory) {
       env.TOOLPLEX_SESSION_RESUME_HISTORY = sessionResumeHistory;
+    }
+
+    // Add user ID for per-user telemetry (system keys only)
+    if (userId) {
+      env.TOOLPLEX_USER_ID = userId;
     }
 
     const transport = new StdioClientTransport({
