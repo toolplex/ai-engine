@@ -276,7 +276,7 @@ async function checkToolConfirmation(
   _context: { sessionId: string; streamId: string },
 ): Promise<ConfirmationRequest | null> {
   // Install/uninstall operations always require confirmation
-  if (toolName === "install_server" || toolName === "install_mcp_server") {
+  if (toolName === "install") {
     return {
       type: "install",
       data: {
@@ -287,7 +287,7 @@ async function checkToolConfirmation(
     };
   }
 
-  if (toolName === "uninstall_server" || toolName === "uninstall_mcp_server") {
+  if (toolName === "uninstall") {
     return {
       type: "uninstall",
       data: {
