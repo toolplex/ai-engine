@@ -61,8 +61,13 @@ export class ChatEngine {
   /**
    * Initialize MCP for a session
    * @param userId - Optional user ID for system API keys (per-user telemetry)
+   * @param clientMode - Client mode: standard, restricted, or automation
    */
-  async initializeMCP(sessionId: string, userId?: string): Promise<void> {
+  async initializeMCP(
+    sessionId: string,
+    userId?: string,
+    clientMode?: "standard" | "restricted" | "automation",
+  ): Promise<void> {
     const apiKey = await this.adapter.credentials.getToolPlexApiKey();
     const sessionInfo = this.adapter.mcp.getSessionInfo(sessionId);
 
@@ -70,12 +75,14 @@ export class ChatEngine {
       this.adapter.logger.debug("ChatEngine: Initializing MCP transport", {
         sessionId,
         userId,
+        clientMode,
       });
       const result = await this.adapter.mcp.createTransport(
         sessionId,
         apiKey,
         undefined,
         userId,
+        clientMode,
       );
 
       if (!result.success) {
@@ -87,12 +94,14 @@ export class ChatEngine {
   /**
    * Initialize a session with ToolPlex context
    * @param userId - Optional user ID for system API keys (per-user telemetry)
+   * @param clientMode - Client mode: standard, restricted, or automation
    */
   async initializeSession(
     sessionId: string,
     modelId: string,
     provider: string,
     userId?: string,
+    clientMode?: "standard" | "restricted" | "automation",
   ): Promise<{ success: boolean; context?: string; error?: string }> {
     try {
       this.adapter.logger.debug(
@@ -102,11 +111,12 @@ export class ChatEngine {
           modelId,
           provider,
           userId,
+          clientMode,
         },
       );
 
       // Initialize MCP transport
-      await this.initializeMCP(sessionId, userId);
+      await this.initializeMCP(sessionId, userId, clientMode);
 
       // Extract model metadata
       const modelParts = modelId.split("/");

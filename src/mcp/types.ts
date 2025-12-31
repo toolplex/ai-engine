@@ -46,20 +46,32 @@ export interface MCPToolResult {
 }
 
 /**
+ * Options for creating a transport
+ */
+export interface CreateTransportOptions {
+  sessionResumeHistory?: string;
+  userId?: string;
+  /** Client mode: standard, restricted, or automation */
+  clientMode?: "standard" | "restricted" | "automation";
+}
+
+/**
  * Transport factory interface - platforms implement this
  */
 export interface TransportFactory {
   /**
    * Create a transport and connect to the MCP server
    * @param apiKey - ToolPlex API key
-   * @param sessionResumeHistory - Optional session history for resuming
-   * @param userId - Optional user ID for per-user telemetry (system keys only)
+   * @param sessionResumeHistory - Optional session history for resuming (deprecated, use options)
+   * @param userId - Optional user ID for per-user telemetry (deprecated, use options)
+   * @param options - Additional options including clientMode
    * @returns Connected MCP session
    */
   createTransport(
     apiKey: string,
     sessionResumeHistory?: string,
     userId?: string,
+    options?: CreateTransportOptions,
   ): Promise<MCPSession>;
 
   /**

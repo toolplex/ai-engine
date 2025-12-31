@@ -11,6 +11,7 @@ import type {
   MCPToolResult,
   MCPClientConfig,
   TransportFactory,
+  CreateTransportOptions,
 } from "./types.js";
 
 /**
@@ -38,23 +39,29 @@ export class MCPClient {
    * returning, otherwise listTools() will return empty schemas.
    *
    * @param userId - Optional user ID for system API keys (per-user telemetry)
+   * @param options - Additional options including clientMode
    */
   async createSession(
     sessionId: string,
     apiKey: string,
     sessionResumeHistory?: string,
     userId?: string,
+    options?: CreateTransportOptions,
   ): Promise<MCPResult> {
     try {
       // Clean up existing session if it exists
       await this.destroySession(sessionId);
 
-      this.logger?.debug("MCPClient: Creating session", { sessionId });
+      this.logger?.debug("MCPClient: Creating session", {
+        sessionId,
+        clientMode: options?.clientMode,
+      });
 
       const session = await this.transportFactory.createTransport(
         apiKey,
         sessionResumeHistory,
         userId,
+        options,
       );
 
       this.sessions.set(sessionId, session);

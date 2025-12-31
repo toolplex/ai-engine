@@ -105,12 +105,14 @@ export interface ConfirmationHandler {
 export interface MCPTransportAdapter {
   /** Create/connect MCP transport for a session
    * @param userId - Optional user ID for system API keys (per-user telemetry)
+   * @param clientMode - Client mode: standard, restricted, or automation
    */
   createTransport(
     sessionId: string,
     apiKey: string,
     sessionResumeHistory?: string,
     userId?: string,
+    clientMode?: "standard" | "restricted" | "automation",
   ): Promise<MCPResult>;
 
   /** Get session info */

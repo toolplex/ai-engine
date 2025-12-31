@@ -12,6 +12,7 @@ export type {
   MCPToolResult,
   TransportFactory,
   MCPClientConfig,
+  CreateTransportOptions,
 } from "./types.js";
 
 // Path utilities

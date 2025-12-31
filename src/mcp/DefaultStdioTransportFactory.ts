@@ -10,7 +10,11 @@
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import type { TransportFactory, MCPSession } from "./types.js";
+import type {
+  TransportFactory,
+  MCPSession,
+  CreateTransportOptions,
+} from "./types.js";
 import { getToolplexClientPath } from "./paths.js";
 
 /**
@@ -29,6 +33,7 @@ export class DefaultStdioTransportFactory implements TransportFactory {
     apiKey: string,
     sessionResumeHistory?: string,
     userId?: string,
+    options?: CreateTransportOptions,
   ): Promise<MCPSession> {
     const toolplexPath = getToolplexClientPath();
 
@@ -39,14 +44,21 @@ export class DefaultStdioTransportFactory implements TransportFactory {
       CLIENT_NAME: "toolplex-ai-engine",
     };
 
-    // Add session resume history if provided
-    if (sessionResumeHistory) {
-      env.TOOLPLEX_SESSION_RESUME_HISTORY = sessionResumeHistory;
+    // Add session resume history if provided (from options or legacy param)
+    const resumeHistory = options?.sessionResumeHistory || sessionResumeHistory;
+    if (resumeHistory) {
+      env.TOOLPLEX_SESSION_RESUME_HISTORY = resumeHistory;
     }
 
-    // Add user ID for per-user telemetry (system keys only)
-    if (userId) {
-      env.TOOLPLEX_USER_ID = userId;
+    // Add user ID for per-user telemetry (from options or legacy param)
+    const effectiveUserId = options?.userId || userId;
+    if (effectiveUserId) {
+      env.TOOLPLEX_USER_ID = effectiveUserId;
+    }
+
+    // Add client mode (standard, restricted, or automation)
+    if (options?.clientMode) {
+      env.CLIENT_MODE = options.clientMode;
     }
 
     const transport = new StdioClientTransport({
