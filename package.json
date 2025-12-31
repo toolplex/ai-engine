@@ -52,7 +52,7 @@
     "@ai-sdk/openai-compatible": "^1.0.19",
     "@modelcontextprotocol/sdk": "^1.16.0",
     "@openrouter/ai-sdk-provider": "^1.2.0",
-    "@toolplex/client": "^0.1.41",
+    "@toolplex/client": "^0.1.42",
     "ai": "^5.0.60"
   },
   "devDependencies": {
