@@ -17,6 +17,7 @@ import type {
   FileAttachment,
   ModelConfigFlags,
 } from "../types/index.js";
+import type { AutomationContext } from "../mcp/types.js";
 import { getModel, toolplexUsageMap } from "../providers/index.js";
 import { buildMCPTools } from "./ToolBuilder.js";
 
@@ -62,11 +63,13 @@ export class ChatEngine {
    * Initialize MCP for a session
    * @param userId - Optional user ID for system API keys (per-user telemetry)
    * @param clientMode - Client mode: standard, restricted, or automation
+   * @param automationContext - Optional automation context for HITL support (automation mode only)
    */
   async initializeMCP(
     sessionId: string,
     userId?: string,
     clientMode?: "standard" | "restricted" | "automation",
+    automationContext?: AutomationContext,
   ): Promise<void> {
     const apiKey = await this.adapter.credentials.getToolPlexApiKey();
     const sessionInfo = this.adapter.mcp.getSessionInfo(sessionId);
@@ -76,6 +79,7 @@ export class ChatEngine {
         sessionId,
         userId,
         clientMode,
+        hasAutomationContext: !!automationContext,
       });
       const result = await this.adapter.mcp.createTransport(
         sessionId,
@@ -83,6 +87,7 @@ export class ChatEngine {
         undefined,
         userId,
         clientMode,
+        automationContext,
       );
 
       if (!result.success) {
@@ -95,6 +100,7 @@ export class ChatEngine {
    * Initialize a session with ToolPlex context
    * @param userId - Optional user ID for system API keys (per-user telemetry)
    * @param clientMode - Client mode: standard, restricted, or automation
+   * @param automationContext - Optional automation context for HITL support (automation mode only)
    */
   async initializeSession(
     sessionId: string,
@@ -102,6 +108,7 @@ export class ChatEngine {
     provider: string,
     userId?: string,
     clientMode?: "standard" | "restricted" | "automation",
+    automationContext?: AutomationContext,
   ): Promise<{ success: boolean; context?: string; error?: string }> {
     try {
       this.adapter.logger.debug(
@@ -112,11 +119,17 @@ export class ChatEngine {
           provider,
           userId,
           clientMode,
+          hasAutomationContext: !!automationContext,
         },
       );
 
       // Initialize MCP transport
-      await this.initializeMCP(sessionId, userId, clientMode);
+      await this.initializeMCP(
+        sessionId,
+        userId,
+        clientMode,
+        automationContext,
+      );
 
       // Extract model metadata
       const modelParts = modelId.split("/");

@@ -23,6 +23,7 @@ import type {
   ChatSession,
   ChatMessage,
 } from "../types/index.js";
+import type { AutomationContext } from "../mcp/types.js";
 
 // ============================================================================
 // Event Emitter Interface
@@ -106,6 +107,7 @@ export interface MCPTransportAdapter {
   /** Create/connect MCP transport for a session
    * @param userId - Optional user ID for system API keys (per-user telemetry)
    * @param clientMode - Client mode: standard, restricted, or automation
+   * @param automationContext - Optional automation context for HITL support (automation mode only)
    */
   createTransport(
     sessionId: string,
@@ -113,6 +115,7 @@ export interface MCPTransportAdapter {
     sessionResumeHistory?: string,
     userId?: string,
     clientMode?: "standard" | "restricted" | "automation",
+    automationContext?: AutomationContext,
   ): Promise<MCPResult>;
 
   /** Get session info */

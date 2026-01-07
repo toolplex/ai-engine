@@ -46,6 +46,23 @@ export interface MCPToolResult {
 }
 
 /**
+ * Automation context for HITL (Human-in-the-Loop) support.
+ * Passed when clientMode is 'automation' to enable tool approval and notifications.
+ */
+export interface AutomationContext {
+  automationId: string;
+  runId: string;
+  /** Tools that require user approval before execution (format: "server_id.tool_name") */
+  toolsRequiringApproval: string[];
+  /** Email address for notifications */
+  notificationEmail?: string;
+  /** Hours before HITL decisions expire (default 24) */
+  expirationHours: number;
+  /** Notification instructions from automation config */
+  notifyInstructions?: string;
+}
+
+/**
  * Options for creating a transport
  */
 export interface CreateTransportOptions {
@@ -53,6 +70,8 @@ export interface CreateTransportOptions {
   userId?: string;
   /** Client mode: standard, restricted, or automation */
   clientMode?: "standard" | "restricted" | "automation";
+  /** Automation context for HITL support (only when clientMode is 'automation') */
+  automationContext?: AutomationContext;
 }
 
 /**

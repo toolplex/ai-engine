@@ -62,6 +62,8 @@ export type {
   MCPToolResult,
   TransportFactory,
   MCPClientConfig,
+  AutomationContext,
+  CreateTransportOptions,
 } from "./mcp/types.js";
 
 // MCP path utilities and default transport

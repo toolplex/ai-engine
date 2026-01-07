@@ -61,6 +61,11 @@ export class DefaultStdioTransportFactory implements TransportFactory {
       env.CLIENT_MODE = options.clientMode;
     }
 
+    // Add automation context for HITL support (only in automation mode)
+    if (options?.automationContext) {
+      env.AUTOMATION_CONTEXT = JSON.stringify(options.automationContext);
+    }
+
     const transport = new StdioClientTransport({
       command: "node", // Uses system Node.js
       args: [toolplexPath],
