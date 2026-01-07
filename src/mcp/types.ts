@@ -60,6 +60,11 @@ export interface AutomationContext {
   expirationHours: number;
   /** Notification instructions from automation config */
   notifyInstructions?: string;
+  /** Pre-approved tool call from HITL resume (bypasses approval check for this specific call) */
+  preApprovedToolCall?: {
+    server_id: string;
+    tool_name: string;
+  };
 }
 
 /**
